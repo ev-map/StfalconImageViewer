@@ -1,26 +1,51 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'maven-publish'
 
 android {
-    compileSdkVersion 29
+    namespace 'com.stfalcon.imageviewer'
+    compileSdkVersion 36
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 36
+    }
+
+    compileOptions {
+        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+            withJavadocJar()
+        }
     }
 }
 
-publish {
-    userOrg = 'troy379'
-    groupId = 'com.github.stfalcon'
-    artifactId = 'stfalcon-imageviewer'
-    publishVersion = '1.0.1'
-    desc = 'A customizable full-screen image viewer with shared image transition support, "pinch to zoom" and "swipe to dismiss" gestures.'
-    uploadName='StfalconImageViewer'
-    website = 'https://github.com/stfalcon-studio/StfalconImageViewer'
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.github.stfalcon'
+            artifactId = 'stfalcon-imageviewer'
+            version = '1.0.1'
+
+            pom {
+                description = 'A customizable full-screen image viewer with shared image transition support, "pinch to zoom" and "swipe to dismiss" gestures.'
+                name = 'StfalconImageViewer'
+                url = 'https://github.com/stfalcon-studio/StfalconImageViewer'
+            }
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
 }
 
 dependencies {

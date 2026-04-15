@@ -1,17 +1,28 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
+    namespace 'com.stfalcon.sample'
+    compileSdkVersion 36
     defaultConfig {
         applicationId "com.stfalcon.stfalconimageviewersample"
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 36
         versionCode 1
         versionName "1.0"
 
         vectorDrawables.useSupportLibrary = true
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    compileOptions {
+        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
     buildTypes {
         release {
@@ -32,5 +43,5 @@ dependencies {
 
     //UI
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'me.relex:circleindicator:2.1.0'
+    implementation 'me.relex:circleindicator:2.1.6'
 }

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.stfalcon.sample.R
-import kotlinx.android.synthetic.main.fragment_demo_card.*
+import com.stfalcon.sample.databinding.FragmentDemoCardBinding
 
 class DemoCardFragment : Fragment() {
 
@@ -37,18 +37,24 @@ class DemoCardFragment : Fragment() {
 
     private var cardActionListener: OnCardActionListener? = null
 
+    private var _binding: FragmentDemoCardBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_demo_card, container, false)
+    ): View {
+        _binding = FragmentDemoCardBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        demoCardTitleText.text = title
-        demoCardDescriptionText.text = description
-        demoCardActionButton.setOnClickListener { cardActionListener?.onCardAction(actionId) }
+        binding.demoCardTitleText.text = title
+        binding.demoCardDescriptionText.text = description
+        binding.demoCardActionButton.setOnClickListener { cardActionListener?.onCardAction(actionId) }
     }
 
     override fun onAttach(context: Context) {
