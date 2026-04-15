@@ -17,6 +17,7 @@
 package com.stfalcon.imageviewer.viewer.dialog
 
 import android.content.Context
+import android.os.Build
 import android.view.KeyEvent
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
@@ -49,6 +50,9 @@ internal class ImageViewerDialog<T>(
             .apply {
                 setOnShowListener { viewerView.open(builderData.transitionView, animateOpen) }
                 setOnDismissListener { builderData.onDismissListener?.onDismiss() }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    onBackInvokedDispatcher.registerOnBackInvokedCallback(0, this@ImageViewerDialog::onBackPressed)
+                }
             }
     }
 
@@ -86,14 +90,18 @@ internal class ImageViewerDialog<T>(
             event.action == KeyEvent.ACTION_UP &&
             !event.isCanceled
         ) {
-            if (viewerView.isScaled) {
-                viewerView.resetScale()
-            } else {
-                viewerView.close()
-            }
+            onBackPressed()
             return true
         }
         return false
+    }
+
+    private fun onBackPressed() {
+        if (viewerView.isScaled) {
+            viewerView.resetScale()
+        } else {
+            viewerView.close()
+        }
     }
 
     private fun setupViewerView() {
